@@ -5,6 +5,7 @@ import {
   VaultItem, VaultItemDocument,
   Vault, VaultDocument,
   Organization, OrganizationDocument,
+  OrganizationMember, OrganizationMemberDocument,
 } from '../schemas';
 
 @Injectable()
@@ -15,15 +16,35 @@ export class SearchService {
     @InjectModel(VaultItem.name) private itemModel: Model<VaultItemDocument>,
     @InjectModel(Vault.name) private vaultModel: Model<VaultDocument>,
     @InjectModel(Organization.name) private orgModel: Model<OrganizationDocument>,
+    @InjectModel(OrganizationMember.name) private memberModel: Model<OrganizationMemberDocument>,
   ) {}
 
   async globalSearch(userId: string, query: string) {
     const regex = new RegExp(query, 'i');
 
+    const memberships = await this.memberModel
+      .find({ userId, isActive: true })
+      .select('organizationId')
+      .lean();
+    const orgIds = memberships.map((m) => m.organizationId);
+
+    const accessibleVaults = await this.vaultModel
+      .find({
+        isActive: true,
+        $or: [
+          { organizationId: { $in: orgIds } },
+          { sharedWithUserIds: userId },
+        ],
+      })
+      .select('_id organizationId')
+      .lean();
+    const vaultIds = accessibleVaults.map((v) => v._id);
+
     const [items, vaults, orgs] = await Promise.all([
       this.itemModel
         .find({
           isActive: true,
+          vaultId: { $in: vaultIds },
           $or: [
             { title: regex },
             { username: regex },
@@ -37,12 +58,14 @@ export class SearchService {
       this.vaultModel
         .find({
           isActive: true,
+          _id: { $in: vaultIds },
           $or: [{ name: regex }, { description: regex }],
         })
         .limit(10)
         .lean(),
       this.orgModel
         .find({
+          _id: { $in: orgIds },
           $or: [{ name: regex }, { description: regex }],
         })
         .limit(10)

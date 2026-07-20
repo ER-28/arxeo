@@ -9,6 +9,8 @@ import {
   VaultSchema,
   Organization,
   OrganizationSchema,
+  OrganizationMember,
+  OrganizationMemberSchema,
 } from '../schemas';
 
 @Module({
@@ -17,6 +19,7 @@ import {
       { name: VaultItem.name, schema: VaultItemSchema },
       { name: Vault.name, schema: VaultSchema },
       { name: Organization.name, schema: OrganizationSchema },
+      { name: OrganizationMember.name, schema: OrganizationMemberSchema },
     ]),
   ],
   controllers: [SearchController],

@@ -25,6 +25,7 @@ import { TeamsModule } from './teams/teams.module';
 import { SecurityModule } from './security/security.module';
 import { ImportExportModule } from './import-export/import-export.module';
 import { SearchModule } from './search/search.module';
+import { BootstrapModule } from './bootstrap/bootstrap.module';
 import appConfig from './config/app.config';
 
 @Module({
@@ -103,6 +104,7 @@ import appConfig from './config/app.config';
     SecurityModule,
     ImportExportModule,
     SearchModule,
+    BootstrapModule,
   ],
   controllers: [AppController],
   providers: [

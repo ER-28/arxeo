@@ -14,7 +14,7 @@ export class VaultItemVersion {
   @Prop({ required: true })
   version: number;
 
-  @Prop({ required: true })
+  @Prop({ type: Object, required: true })
   snapshot: Record<string, any>;
 
   @Prop({ required: true, ref: 'User' })

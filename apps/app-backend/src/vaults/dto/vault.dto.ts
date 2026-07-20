@@ -15,6 +15,7 @@ export class CreateVaultDto {
 
   @ApiProperty()
   @IsString()
+  @IsOptional()
   organizationId: string;
 
   @ApiPropertyOptional()

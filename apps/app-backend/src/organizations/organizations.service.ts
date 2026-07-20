@@ -10,7 +10,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { v4 as uuidv4 } from 'uuid';
 import { MailService } from '../mail/mail.service';
-import * as slugify from 'slugify';
+import slugify from 'slugify';
 import {
   Organization,
   OrganizationDocument,

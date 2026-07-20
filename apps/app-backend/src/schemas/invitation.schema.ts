@@ -32,5 +32,4 @@ export class Invitation {
 
 export const InvitationSchema = SchemaFactory.createForClass(Invitation);
 InvitationSchema.index({ email: 1, organizationId: 1 });
-InvitationSchema.index({ token: 1 }, { unique: true });
 InvitationSchema.index({ expiresAt: 1 }, { expireAfterSeconds: 0 });
